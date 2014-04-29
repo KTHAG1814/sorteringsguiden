@@ -1,0 +1,58 @@
+<meta charset="utf-8">
+<html lang="sv">
+<head>
+<title>Sorteringsguiden</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-tagsinput.css" rel="stylesheet">
+<style type="text/css">
+	body {
+        background: url(field.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+		padding-top: 20vh;
+	}
+
+	h1 {
+		color: #fff;
+	}
+
+	.logo {
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<div class="row logo">
+				<h1>Sorteringsguiden <span class="badge" style="vertical-align:top;background-color: #3a87ad">Beta</span></h1>
+			</div>
+			<div class="row">
+				<form class="form-horizontal" role="form">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-tags"></span>
+						</span>
+						<input type="text" id="tags" class="form-control input-lg" placeholder="Material">
+					</div>
+				</form>
+			</div>
+			<div class="row">
+				<div id="map-canvas" style="display:none;width:100%;height:350px;border-radius:6px" />
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnAPkdrcSnTeWkXqW-F4cjwX-0I_rYYxw&sensor=true">
+</script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script>
+<script type="text/javascript" src="js/bootstrap3-typeahead.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
