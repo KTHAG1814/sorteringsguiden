@@ -35,10 +35,15 @@ function refresh() {
 	}
 
 	if (args.length == 0) {
-		$('#map-canvas').slideUp();
+		$('#map-canvas').slideUp(function() {
+			$('.input-group-addon').removeClass('toggled');
+			$('.bootstrap-tagsinput').removeClass('toggled');
+		});
 		return;
 	}
 	else {
+		$('.input-group-addon').addClass('toggled');
+		$('.bootstrap-tagsinput').addClass('toggled');
 		$('#map-canvas').slideDown(function() {
 			google.maps.event.trigger(map, 'resize');
 			zoomToFit();
