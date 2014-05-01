@@ -6,7 +6,7 @@ var Server = mongo.Server,
 	Db = mongo.Db,
 	BSON = mongo.BSONPure;
 var server = new Server('localhost', 27017, { auto_reconnect: true });
-var db = new Db('sorteringsguiden', server);
+var db = new Db('sorteringsguiden', server, { w: 1 });
 
 db.open(function(err, db) {
 	if (!err) {
