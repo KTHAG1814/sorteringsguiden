@@ -1,10 +1,14 @@
 {
-  "name": "backend",
-  "description": "backend",
+  "name": "Sorteringsguiden",
+  "description": "Sorteringsguiden",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+  	  "start": "node app.js"
+  },
+  "main": "app.js",
   "dependencies": {
     "express": "4.0.0",
-    "mongodb": "^1.4.2"
+    "mongodb": "1.4.3"
   }
 }

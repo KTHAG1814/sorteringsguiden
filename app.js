@@ -5,12 +5,23 @@ var helpers = require('./helpers.js');
 var Server = mongo.Server,
 	Db = mongo.Db,
 	BSON = mongo.BSONPure;
-var server = new Server('localhost', 27017, { auto_reconnect: true });
+
+var server = new Server(process.env.OPENSHIFT_MONGODB_DB_HOST || 'localhost',
+		process.env.OPENSHIFT_MONGODB_DB_PORT || 27017, { auto_reconnect: true });
 var db = new Db('sorteringsguiden', server, { w: 1 });
 
 db.open(function(err, db) {
 	if (!err) {
 		console.log('Connected to MongoDB');
+
+		if (process.env.OPENSHIFT_MONGODB_DB_USERNAME) {
+			db.authenticate(process.env.OPENSHIFT_MONGODB_DB_USERNAME,
+				process.env.OPENSHIFT_MONGODB_DB_PASSWORD, function(err, res) {
+					if (err) {
+						console.log(err);
+					}
+				});
+		}
 	}
 });
 
@@ -75,11 +86,22 @@ app.get('/api/stations', function(req, res) {
 		collection.find({
 			Types_Up: { $in: args }
 		}).toArray(function(err, items) {
-			res.send(parse_stations(items, args, position));
+			if (!err) {
+				res.send(parse_stations(items, args, position));
+			} else {
+				console.log(err);
+			}
 		});
 	});
 });
 
-var server = app.listen(3000, function() {
-	console.log('Listening on port %d', server.address().port);
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+if (typeof ipaddress === "undefined") {
+	ipaddress = "127.0.0.1";
+}
+
+var server = app.listen(port, ipaddress, function() {
+	console.log('Listening on %s port %d', ipaddress, server.address().port);
 });
