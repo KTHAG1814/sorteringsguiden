@@ -113,6 +113,9 @@ function init() {
 				tags.tagsinput('add', item);
 				refresh();
 				return;
+			},
+			highlighter: function(item) {
+				return item + ' <font color="#bbb"><small><i>' + lookup[item].description + '</i></small></font>';
 			}
 		});
 	});
