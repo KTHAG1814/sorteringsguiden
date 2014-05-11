@@ -148,7 +148,7 @@ function init() {
 	});
 
 	// load background image
-	$('body').css('background', 'url(field.jpg) no-repeat center center fixed');
+	$('body').css('background-image', 'url(field.jpg)');
 }
 
 google.maps.event.addDomListener(window, 'load', init);
