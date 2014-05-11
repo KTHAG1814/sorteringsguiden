@@ -11,7 +11,7 @@
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-		padding-top: 20vh;
+		padding-top: 10vh;
 	}
 
 	h1 {
@@ -30,6 +30,10 @@
 		border-bottom-left-radius: 0;
 	}
 
+	#map {
+		display: none;
+	}
+
 	#map-canvas {
 		margin-top: -14px;
 		height: 400px;
@@ -37,7 +41,28 @@
 		border-bottom-right-radius: 4px;
 		margin-left: 1px;
 		margin-right: 1px;
-		display: none;
+	}
+
+	#map-canvas .centerMarker {
+		position: absolute;
+		background:url(http://i.stack.imgur.com/orZ4x.png) no-repeat;
+		top: 50%; left: 50%;
+		z-index:1;
+		height: 22px;
+		width: 22px;
+		margin-left: -11px;
+		margin-top: -22px;
+	}
+
+	#position-info {
+		background-color: #fff;
+		border-radius: 4px;
+		margin-top: 10px;
+		padding: 10px;
+		opacity: 0.9;
+		text-align: center;
+		font-weight: bold;
+		font-size: 0.7em;
 	}
 </style>
 </head>
@@ -57,7 +82,10 @@
 						<input type="text" id="tags" class="form-control input-lg" placeholder="Produkt">
 					</div>
 				</form>
-				<div id="map-canvas" />
+				<div id="map">
+					<div id="map-canvas"></div> 
+					<div id="position-info">Visar kartan fel position? Välj en ny genom att klicka här.</div>
+				</div>
 			</div>
 			<div class="row">
 			</div>

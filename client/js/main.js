@@ -2,6 +2,7 @@ var map;
 var position;
 var markers = [];
 var lookup = {};
+var positionMarker;
 
 function clearMarkers() {
 	for (var i = 0; i < markers.length; i++) {
@@ -35,7 +36,7 @@ function refresh() {
 	}
 
 	if (args.length == 0) {
-		$('#map-canvas').slideUp(function() {
+		$('#map').slideUp(function() {
 			$('.input-group-addon').removeClass('toggled');
 			$('.bootstrap-tagsinput').removeClass('toggled');
 		});
@@ -44,7 +45,7 @@ function refresh() {
 	else {
 		$('.input-group-addon').addClass('toggled');
 		$('.bootstrap-tagsinput').addClass('toggled');
-		$('#map-canvas').slideDown(function() {
+		$('#map').slideDown(function() {
 			google.maps.event.trigger(map, 'resize');
 			zoomToFit();
 		});
@@ -84,15 +85,21 @@ function init() {
 
 	map = new google.maps.Map(document.getElementById("map-canvas"),
 		mapOptions);
+	position = new google.maps.LatLng(59.347508, 18.073851);
+	map.setCenter(position);
+	positionMarker = new google.maps.Marker({
+		position: position,
+		map: map,
+		icon: "http://i.stack.imgur.com/orZ4x.png"
+	});
+
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(pos) {
 			position = new google.maps.LatLng(pos.coords.latitude,
 				pos.coords.longitude);
-			map.setCenter(position);
+			positionMarker.setPosition(position);
 		});
-	} else {
-		alert('Update browser to support HTML5 geolocation');
 	}
 
 	var tags = $('#tags');
@@ -121,6 +128,23 @@ function init() {
 	});
 	tags.on('itemRemoved', function(event) {
 		refresh();
+	});
+
+	var positionInfoText = $('#position-info').html();
+	$('#position-info').click(function() {
+		var elem = $('#map-canvas').find('.centerMarker');
+		if (elem.length > 0) {
+			$('#position-info').html(positionInfoText);
+			elem.remove();
+			position = map.getCenter();
+			positionMarker.setPosition(position);
+			positionMarker.setVisible(true);
+			refresh();
+		} else {
+			$('<div/>').addClass('centerMarker').appendTo(map.getDiv());
+			positionMarker.setVisible(false);
+			$('#position-info').html('Flytta kartan så att den blåa punkter hamnar på din position, klicka sedan här igen.');
+		}
 	});
 }
 
