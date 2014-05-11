@@ -146,6 +146,9 @@ function init() {
 			$('#position-info').html('Flytta kartan så att den blåa punkter hamnar på din position, klicka sedan här igen.');
 		}
 	});
+
+	// load background image
+	$('body').css('background', 'url(field.jpg) no-repeat center center fixed');
 }
 
 google.maps.event.addDomListener(window, 'load', init);
