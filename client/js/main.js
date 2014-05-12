@@ -1,6 +1,8 @@
 var map;
+var directions;
+var directionsRenderer;
 var position;
-var markers = [];
+var markers = Array();
 var lookup = {};
 var positionMarker;
 
@@ -8,7 +10,7 @@ function clearMarkers() {
 	for (var i = 0; i < markers.length; i++) {
 		markers[i].setMap(null);
 	}
-	markers = [];
+	markers = Array();
 }
 
 function zoomToFit() {
@@ -36,6 +38,7 @@ function refresh() {
 	}
 
 	if (args.length == 0) {
+		directionsRenderer.setMap(null);
 		$('#map').slideUp(function() {
 			$('.input-group-addon').removeClass('toggled');
 			$('.bootstrap-tagsinput').removeClass('toggled');
@@ -53,9 +56,29 @@ function refresh() {
 
 	var url = '/api/stations?args=' + args.join() + '&position=' + position.lat() + ',' + position.lng();
 	$.get(url, function(data) {
+		var waypoints = Array();
+		var end = null;
 		for (var i = 0; i < data.length; i++) {
 			var station = data[i];
-
+			var stationPos = new google.maps.LatLng(station.Lat, station.Lng);
+			if (end == null) {
+				end = station;
+				end.Location = stationPos
+			} else {
+				if (end.Distance < station.Distance) {
+					waypoints.push({
+						location: end.Location,
+						stopover: true
+					});
+					end = station;
+					end.Location = stationPos;
+				} else {
+					waypoints.push({
+						location: stationPos,
+						stopover: true
+					});
+				}
+			}
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(station.Lat, station.Lng),
 				map: map,
@@ -75,6 +98,22 @@ function refresh() {
 			})(marker, i, contentStr);
 		}
 		zoomToFit();
+
+		if (end != null) {
+			var request = {
+				origin: position,
+				destination: end.Location,
+				travelMode: google.maps.TravelMode.WALKING,
+				optimizeWaypoints: true
+			};
+			if (waypoints.length > 0) request.waypoints = waypoints;
+			directions.route(request, function(response, status) {
+				if (status == google.maps.DirectionsStatus.OK) {
+					directionsRenderer.setMap(map);
+					directionsRenderer.setDirections(response);
+				}
+			});
+		}
 	});
 }
 
@@ -101,6 +140,11 @@ function init() {
 			positionMarker.setPosition(position);
 		});
 	}
+
+	directions = new google.maps.DirectionsService();
+	directionsRenderer = new google.maps.DirectionsRenderer({
+		suppressMarkers: true
+	});
 
 	var tags = $('#tags');
 	tags.tagsinput();
